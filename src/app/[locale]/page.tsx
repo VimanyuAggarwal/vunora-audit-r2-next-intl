@@ -4,12 +4,20 @@ import { Circle, MoveRight } from 'lucide-react';
 import { formatPostDate, getPosts } from '@/lib/utils/posts';
 
 import { Link } from '@/i18n/routing';
+import { fetchPage, readFields } from '../../lib/vunora';
+import { cookies } from 'next/headers';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
 export default async function HomePage({ params }: PageProps) {
+  const { data: cmsPage } = await fetchPage(
+    'home',
+    undefined,
+    (await cookies()).get('supercms_visitor_id')?.value,
+  );
+  const f = readFields(cmsPage);
   const { locale } = await params;
 
   const homeTranslations = await getTranslations({ locale, namespace: 'homePage' });
@@ -28,7 +36,7 @@ export default async function HomePage({ params }: PageProps) {
               <Circle className="absolute right-full top-1 h-[10px] w-[10px] translate-x-1 bg-background text-tertiary-foreground md:top-0" />
 
               <dl className="mb-2 whitespace-nowrap text-sm font-semibold text-secondary-foreground dark:text-tertiary-foreground lg:absolute lg:right-full lg:top-0 lg:mb-0 lg:-translate-x-12">
-                <dt className="sr-only">Published on</dt>
+                <dt className="sr-only">{f.text_1 ?? 'Published on'}</dt>
                 <dd>
                   <time dateTime={post.metadata.publishedDate}>
                     {formatPostDate(post.metadata.publishedDate, locale)}
