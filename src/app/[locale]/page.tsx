@@ -4,12 +4,20 @@ import { Circle, MoveRight } from 'lucide-react';
 import { formatPostDate, getPosts } from '@/lib/utils/posts';
 
 import { Link } from '@/i18n/routing';
+import { fetchPage, readFields } from '../../lib/vunora';
+import { cookies } from 'next/headers';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
 export default async function HomePage({ params }: PageProps) {
+  const { data: cmsPage } = await fetchPage(
+    'home',
+    undefined,
+    (await cookies()).get('supercms_visitor_id')?.value,
+  );
+  const f = readFields(cmsPage);
   const { locale } = await params;
 
   const homeTranslations = await getTranslations({ locale, namespace: 'homePage' });
@@ -19,7 +27,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-12 lg:px-12 lg:py-16">
-      <h1 className="text-3xl font-semibold">{homeTranslations('title')}</h1>
+      <h1 className="text-3xl font-semibold">{f.heading_1 ?? homeTranslations('title')}</h1>
 
       <main className="mt-12 pl-2 lg:mt-20 lg:pl-40 xl:mt-24">
         <div className="space-y-18 border-l border-border">
@@ -28,7 +36,7 @@ export default async function HomePage({ params }: PageProps) {
               <Circle className="absolute right-full top-1 h-[10px] w-[10px] translate-x-1 bg-background text-tertiary-foreground md:top-0" />
 
               <dl className="mb-2 whitespace-nowrap text-sm font-semibold text-secondary-foreground dark:text-tertiary-foreground lg:absolute lg:right-full lg:top-0 lg:mb-0 lg:-translate-x-12">
-                <dt className="sr-only">Published on</dt>
+                <dt className="sr-only">{f.text_1 ?? 'Published on'}</dt>
                 <dd>
                   <time dateTime={post.metadata.publishedDate}>
                     {formatPostDate(post.metadata.publishedDate, locale)}
@@ -62,7 +70,7 @@ export default async function HomePage({ params }: PageProps) {
                 href={`/blog/${post.slug}`}
                 className="mt-10 block text-sm font-semibold text-main hover:underline"
               >
-                {postTextsTranslations('readMore')}
+                {f.text_2 ?? postTextsTranslations('readMore')}
               </Link>
             </article>
           ))}
@@ -72,7 +80,7 @@ export default async function HomePage({ params }: PageProps) {
           href="/blog"
           className="ml-auto mt-12 block w-fit text-sm font-semibold text-main hover:underline"
         >
-          {homeTranslations('viewAllPosts')}
+          {f.text_3 ?? homeTranslations('viewAllPosts')}
           <MoveRight className="ml-2 inline h-4 w-4" />
         </Link>
       </main>
