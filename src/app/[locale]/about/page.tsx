@@ -8,6 +8,8 @@ import { getPathname, Link } from '@/i18n/routing';
 import GithubIcon from '@/components/brand-icons/github';
 import LinkedinIcon from '@/components/brand-icons/linkedin';
 import XIcon from '@/components/brand-icons/x';
+import { fetchPage, readFields } from '../../../lib/vunora';
+import { cookies } from 'next/headers';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -53,6 +55,12 @@ const socialMedias = [
 ];
 
 export default async function AboutPage({ params }: PageProps) {
+  const { data: cmsPage } = await fetchPage(
+    'about',
+    undefined,
+    (await cookies()).get('supercms_visitor_id')?.value,
+  );
+  const f = readFields(cmsPage);
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'aboutPage' });
 
@@ -60,7 +68,7 @@ export default async function AboutPage({ params }: PageProps) {
 
   return (
     <section className="mx-auto max-w-4xl px-6 pb-16 pt-20">
-      <h1 className="text-3xl font-semibold">About</h1>
+      <h1 className="text-3xl font-semibold">{f.heading_1 ?? 'About'}</h1>
 
       <hr className="mt-6 border-border dark:border-secondary-border" />
 
@@ -69,17 +77,17 @@ export default async function AboutPage({ params }: PageProps) {
           <Image
             className="rounded-full"
             src="/avatar.webp"
-            alt="avatar"
+            alt={f.image_alt_1 ?? 'avatar'}
             width={192}
             height={192}
           />
 
-          <h2 className="mt-6 text-xl font-semibold">{t('name')}</h2>
+          <h2 className="mt-6 text-xl font-semibold">{f.heading_3 ?? t('name')}</h2>
 
           <div className="mt-2 text-base leading-7 text-secondary-foreground">
-            {t('role')}
+            {f.text_1 ?? t('role')}
             <br />
-            {t('bio')}
+            {f.text_2 ?? t('bio')}
           </div>
 
           <div className="mt-6 flex gap-3">

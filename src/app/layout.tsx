@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Analytics } from '@vercel/analytics/next';
+import { VunoraSiteCode } from './vunora-site-code'
 
 export default function RootLayout({
   children,
@@ -9,8 +10,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
+        <VunoraSiteCode slot="head" />
         {children}
         <Analytics />
+        <VunoraSiteCode slot="body-end" />
       </body>
     </html>
   );
