@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
+const broken: string = 42;
 export default async function TagsPage({ params }: PageProps) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'tagsPage' });
