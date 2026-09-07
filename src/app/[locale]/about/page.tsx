@@ -60,7 +60,7 @@ export default async function AboutPage({ params }: PageProps) {
 
   return (
     <section className="mx-auto max-w-4xl px-6 pb-16 pt-20">
-      <h1 className="text-3xl font-semibold">About</h1>
+      <h1 className="text-3xl font-semibold">About me</h1>
 
       <hr className="mt-6 border-border dark:border-secondary-border" />
 
