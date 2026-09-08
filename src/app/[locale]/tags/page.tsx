@@ -4,6 +4,8 @@ import { getTranslations } from 'next-intl/server';
 import generatePageMetadata from '@/lib/utils/seo';
 import { getTags } from '@/lib/utils/posts';
 import { getPathname, Link } from '@/i18n/routing';
+import { fetchPage, readFields } from '../../../lib/vunora';
+import { cookies } from 'next/headers';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -24,6 +26,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function TagsPage({ params }: PageProps) {
+  const { data: cmsPage } = await fetchPage(
+    'tags',
+    undefined,
+    (await cookies()).get('supercms_visitor_id')?.value,
+  );
+  const f = readFields(cmsPage);
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'tagsPage' });
 
@@ -31,7 +39,7 @@ export default async function TagsPage({ params }: PageProps) {
 
   return (
     <section className="mx-auto max-w-2xl px-6 pb-16 pt-20">
-      <h1 className="text-3xl font-semibold">{t('title')}</h1>
+      <h1 className="text-3xl font-semibold">{f.heading_1 ?? t('title')}</h1>
 
       <hr className="mt-6 border-border dark:border-secondary-border" />
 

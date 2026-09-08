@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils/cn';
 
 import { Link } from '@/i18n/routing';
 import Pagination from '@/components/pagination';
+import { fetchPage, readFields } from '../../../../lib/vunora';
+import { cookies } from 'next/headers';
 
 interface TemplateLayoutProps {
   locale: string;
@@ -16,6 +18,12 @@ interface TemplateLayoutProps {
 export const POSTS_PER_PAGE = 3;
 
 export default async function TagArchiveTemplate({ locale, tag, page }: TemplateLayoutProps) {
+  const { data: cmsPage } = await fetchPage(
+    'blog',
+    undefined,
+    (await cookies()).get('supercms_visitor_id')?.value,
+  );
+  const f = readFields(cmsPage);
   const blogTranslations = await getTranslations({ locale, namespace: 'blogPage' });
   const postTextsTranslations = await getTranslations({ locale, namespace: 'posts' });
 
@@ -34,7 +42,9 @@ export default async function TagArchiveTemplate({ locale, tag, page }: Template
     <section className="mx-auto flex w-full max-w-4xl px-6 py-12 lg:px-10 lg:py-20">
       {tags.length > 0 && (
         <aside className="hidden min-w-48 border-r border-border md:block">
-          <h1 className="text-xl font-semibold">{blogTranslations('tagsTitle')}</h1>
+          <h1 className="text-xl font-semibold">
+            {f.tag_archive_template_heading_1 ?? blogTranslations('tagsTitle')}
+          </h1>
 
           <ul className="mt-7 space-y-3.5">
             {tags.map((tagItem) => (
@@ -61,7 +71,7 @@ export default async function TagArchiveTemplate({ locale, tag, page }: Template
             className="relative border-b border-border pb-10 last:border-b-0"
           >
             <dl className="mb-2 text-sm text-secondary-foreground dark:text-tertiary-foreground">
-              <dt className="sr-only">Published on</dt>
+              <dt className="sr-only">{f.tag_archive_template_text_1 ?? 'Published on'}</dt>
               <dd>
                 <time dateTime={post.metadata.publishedDate}>
                   {formatPostDate(post.metadata.publishedDate, locale)}
@@ -95,7 +105,7 @@ export default async function TagArchiveTemplate({ locale, tag, page }: Template
               href={`/blog/${post.slug}`}
               className="mt-8 block text-sm font-semibold text-main hover:underline"
             >
-              {postTextsTranslations('readMore')}
+              {f.tag_archive_template_text_2 ?? postTextsTranslations('readMore')}
             </Link>
           </article>
         ))}
