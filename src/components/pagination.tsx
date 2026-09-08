@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils/cn';
 import { Link, usePathname } from '@/i18n/routing';
+import { fetchPageClient, useFields, readVunoraVisitorId } from '../lib/vunora';
 
 interface PaginationProps {
   className?: string;
@@ -13,6 +14,8 @@ interface PaginationProps {
 }
 
 export default function Pagination({ className = '', currentPage, totalPages }: PaginationProps) {
+  const { data: cmsPage } = fetchPageClient('blog', { visitorId: readVunoraVisitorId() });
+  const f = useFields(cmsPage);
   const t = useTranslations('pagination');
   const pathname = usePathname();
   const basePath = pathname.replace(/^\//, '').replace(/\/page\/\d+$/, '');
@@ -39,7 +42,7 @@ export default function Pagination({ className = '', currentPage, totalPages }: 
       )}
 
       <span className="text-main">
-        {currentPage} {t('of')} {totalPages}
+        {currentPage} {f.pagination_text_2 ?? t('of')} {totalPages}
       </span>
 
       {hasNextPage ? (
