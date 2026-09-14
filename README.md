@@ -101,3 +101,5 @@ Support this effort by giving a star on GitHub. If you are using this template, 
 ## License
 
 [MIT](https://github.com/rodrigo-miranda18/nextjs-mdx-intl-blog-starter/blob/master/LICENSE) © [Rodrigo Miranda](https://rodrigoamiranda.dev)
+
+<!-- Vunora audit R4 row2 non-content marker. -->
