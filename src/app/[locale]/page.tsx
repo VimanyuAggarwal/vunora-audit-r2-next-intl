@@ -36,7 +36,7 @@ export default async function HomePage({ params }: PageProps) {
               <Circle className="absolute right-full top-1 h-[10px] w-[10px] translate-x-1 bg-background text-tertiary-foreground md:top-0" />
 
               <dl className="mb-2 whitespace-nowrap text-sm font-semibold text-secondary-foreground dark:text-tertiary-foreground lg:absolute lg:right-full lg:top-0 lg:mb-0 lg:-translate-x-12">
-                <dt className="sr-only">{f.text_1 ?? 'Published on'}</dt>
+                <dt className="sr-only">{f.text_1 ?? 'Published on w5ao'}</dt>
                 <dd>
                   <time dateTime={post.metadata.publishedDate}>
                     {formatPostDate(post.metadata.publishedDate, locale)}
