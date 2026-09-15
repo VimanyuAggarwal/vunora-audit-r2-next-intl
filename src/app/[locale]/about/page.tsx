@@ -68,7 +68,7 @@ export default async function AboutPage({ params }: PageProps) {
 
   return (
     <section className="mx-auto max-w-4xl px-6 pb-16 pt-20">
-      <h1 className="text-3xl font-semibold">{f.heading_2 ?? 'About'}</h1>
+      <h1 className="text-3xl font-semibold">{f.heading_2 ?? 'About w5aq'}</h1>
 
       <hr className="mt-6 border-border dark:border-secondary-border" />
 
