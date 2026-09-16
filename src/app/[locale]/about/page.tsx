@@ -54,6 +54,7 @@ const socialMedias = [
   },
 ];
 
+// v12 live proof marker 20260916
 export default async function AboutPage({ params }: PageProps) {
   const { data: cmsPage } = await fetchPage(
     'about',
